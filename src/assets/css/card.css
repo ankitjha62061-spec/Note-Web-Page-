@@ -9,6 +9,7 @@
   color: #333;
   padding: 1.5rem;
   overflow: hidden;
+  font-size: large;
 }
 
 .card-title {
@@ -28,7 +29,7 @@
 }
 
 .card-details {
-  font-size: 14px;
+  font-size: 40px;
   color: gray;
   cursor: pointer;
   width: fit-content;

@@ -11,6 +11,8 @@ export default function App() {
   const [notes, setNotes] = useState([]);
   const [currentNote, setCurrentNote] = useState(null);
   const [search, setSearch] = useState("");
+  // const [deleteId, setDeleteId] = useState(null);
+
 
   const handleCreateNote = (note) => {
     if (note) {
@@ -33,13 +35,14 @@ export default function App() {
     }
   };
 
-  // const handleDeleteNote = (noteId) => {
-  //   const filteredNotes = notes.filter((n) => n.id !== noteId);
-  //   setNotes(filteredNotes);
-  // };
 
 const handleDeleteNote = (noteId) => {
   const confirmDelete = window.confirm("Are you sure you want to delete this note?");
+
+
+
+
+
 
   if (confirmDelete) {
     const filteredNotes = notes.filter((n) => n.id !== noteId);
@@ -64,14 +67,13 @@ const handleDeleteNote = (noteId) => {
           n.title.toLowerCase().includes(search.toLowerCase()) ||
           n.desc.toLowerCase().includes(search.toLowerCase())
       )
+      : notes;
 
-  
-    : notes;
+
 
   return (
     <div className="app">
       <Navbar setOpen={setOnCreateNote} />
-
       <div className="wrapper container">
 
 
@@ -101,6 +103,7 @@ const handleDeleteNote = (noteId) => {
             />
           ))}
         </div>
+
 
         {onCreateNote && (
           <UpsertNote
