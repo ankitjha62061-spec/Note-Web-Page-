@@ -19,7 +19,7 @@ export const NoteCard = ({ onPreview, onUpdate, onDelete, note }) => {
           className="card-details"
           onClick={() => onPreview(note)}
         >
-          read more
+          {/* show on a single page   */}
         </span>
 
         <div className="card-footer">

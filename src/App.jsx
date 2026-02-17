@@ -4,6 +4,7 @@ import { Navbar } from "./components/Navbar";
 import { NoteCard } from "./components/NoteCard";
 import { NoteDetails } from "./components/NoteDetails";
 import { UpsertNote } from "./components/UpsertNote";
+import { DeleteModal } from "./components/DeleteModal";
 
 export default function App() {
   const [onCreateNote, setOnCreateNote] = useState(false);
@@ -11,8 +12,8 @@ export default function App() {
   const [notes, setNotes] = useState([]);
   const [currentNote, setCurrentNote] = useState(null);
   const [search, setSearch] = useState("");
-  // const [deleteId, setDeleteId] = useState(null);
-
+  const [deleteVisible, setDeleteVisible] = useState(false);
+  const [noteToDelete, setNoteToDelete] = useState(null);
 
   const handleCreateNote = (note) => {
     if (note) {
@@ -35,26 +36,22 @@ export default function App() {
     }
   };
 
+  const handleDeleteNote = (noteId) => {
+    setNoteToDelete(noteId);
+    setDeleteVisible(true);
+  };
 
-const handleDeleteNote = (noteId) => {
-  const confirmDelete = window.confirm("Are you sure you want to delete this note?");
-
-
-
-
-
-
-  if (confirmDelete) {
-    const filteredNotes = notes.filter((n) => n.id !== noteId);
+  const confirmDelete = () => {
+    const filteredNotes = notes.filter((n) => n.id !== noteToDelete);
     setNotes(filteredNotes);
-  }
-};
+    setDeleteVisible(false);
+    setNoteToDelete(null);
+  };
 
-
-
-
-
-
+  const cancelDelete = () => {
+    setDeleteVisible(false);
+    setNoteToDelete(null);
+  };
 
   const handleOnPreview = (note) => {
     setCurrentNote(note);
@@ -67,30 +64,24 @@ const handleDeleteNote = (noteId) => {
           n.title.toLowerCase().includes(search.toLowerCase()) ||
           n.desc.toLowerCase().includes(search.toLowerCase())
       )
-      : notes;
-
-
+    : notes;
 
   return (
     <div className="app">
       <Navbar setOpen={setOnCreateNote} />
+
       <div className="wrapper container">
-
-
-
- <div className="search-wrapper">
-  <input
-    onChange={(e) => setSearch(e.target.value)}
-    type="text"
-    className="search-input"
-    placeholder="Search"
-  />
-  <button className="search-btn">
-    <i className="fa-solid fa-magnifying-glass"></i>
-  </button>
-</div>
- 
-
+        <div className="search-wrapper">
+          <input
+            onChange={(e) => setSearch(e.target.value)}
+            type="text"
+            className="search-input"
+            placeholder="Search"
+          />
+          <button className="search-btn">
+            <i className="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
 
         <div className="notes-wrapper">
           {filteredNotes.map((note) => (
@@ -103,7 +94,6 @@ const handleDeleteNote = (noteId) => {
             />
           ))}
         </div>
-
 
         {onCreateNote && (
           <UpsertNote
@@ -120,6 +110,12 @@ const handleDeleteNote = (noteId) => {
             setView={setOnViewNote}
           />
         )}
+
+        <DeleteModal
+          visible={deleteVisible}
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
       </div>
     </div>
   );
