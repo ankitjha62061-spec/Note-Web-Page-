@@ -1,55 +1,47 @@
+.note-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  height: 250px;          
+  display: flex;
+  max-width: 400px;
+  max-height: 300px;
+  
+  overflow-wrap: break-word;
+}
+
 .note-card-wrapper {
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: 150px;
-  height: 100%;
-  border-radius: 0.3rem;
-  background-color: white;
-  color: #333;
-  padding: 1.5rem;
-  overflow: hidden;
-  font-size: large;
-
 }
 
 .card-title {
-  font-size: 1.2rem;
-  --max-lines: 2;
-  display: -webkit-box;
-  overflow: hidden;
-  word-wrap: break-word;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
   cursor: pointer;
 }
 
 .card-body {
-  margin: 0.5rem 0;
-  --max-lines: 2;
-  display: -webkit-box;
-  overflow: hidden;
-
+  flex: 1;                    
+  overflow-y: auto;        
+  margin-bottom: 10px;
 }
 
-.card-details {
-  font-size: 40px;
-  color: gray;
-  cursor: pointer;
-  width: fit-content;
- 
+.card-body p {
+  font-size: 14px;
+  line-height: 1.4;
+  word-break: break-word;
 }
+
 
 .card-footer {
-  margin-top: 0.5rem;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
 
-.card-timeline {
-  font-size: 14px;
-  color: gray;
-  font-style: italic;
-}
 
 .card-actions {
   display: flex;
@@ -57,6 +49,10 @@
   justify-content: flex-end;
   gap: 1rem;
 }
+
+
+
+
 
 .action-item {
   cursor: pointer;
@@ -77,12 +73,13 @@
 
 
 .note-card {
-  background-color: rgb(179, 39, 39);
+  background-color: #ebe0e0;
   transition: all 0.3s ease;
 }
 
 .note-card:hover {
-  background-color: #ffe0e0; /* light pink */
+  background-color: #ddfbf9; 
   transform: translateY(-8px);
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
 }
+

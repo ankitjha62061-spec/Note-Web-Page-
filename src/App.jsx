@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./assets/css/app.css";
 import { Navbar } from "./components/Navbar";
 import { NoteCard } from "./components/NoteCard";
@@ -12,6 +12,7 @@ export default function App() {
   const [notes, setNotes] = useState([]);
   const [currentNote, setCurrentNote] = useState(null);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
 
@@ -58,11 +59,19 @@ export default function App() {
     setOnViewNote(true);
   };
 
-  const filteredNotes = search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500); 
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  const filteredNotes = debouncedSearch
     ? notes.filter(
         (n) =>
-          n.title.toLowerCase().includes(search.toLowerCase()) ||
-          n.desc.toLowerCase().includes(search.toLowerCase())
+          n.title.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+          n.desc.toLowerCase().includes(debouncedSearch.toLowerCase())
       )
     : notes;
 
@@ -73,6 +82,7 @@ export default function App() {
       <div className="wrapper container">
         <div className="search-wrapper">
           <input
+            value={search}
             onChange={(e) => setSearch(e.target.value)}
             type="text"
             className="search-input"
@@ -84,15 +94,21 @@ export default function App() {
         </div>
 
         <div className="notes-wrapper">
-          {filteredNotes.map((note) => (
-            <NoteCard
-              key={note.id}
-              note={note}
-              onDelete={handleDeleteNote}
-              onUpdate={handleOnUpdate}
-              onPreview={handleOnPreview}
-            />
-          ))}
+          {notes.length === 0 ? (
+            <h2 className="Flex">No Notes Yet. Create One!</h2>
+          ) : filteredNotes.length === 0 ? (
+            <h2 className="code-wipe">No Notes Found</h2>
+          ) : (
+            filteredNotes.map((note) => (
+              <NoteCard
+                key={note.id}
+                note={note}
+                onDelete={handleDeleteNote}
+                onUpdate={handleOnUpdate}
+                onPreview={handleOnPreview}
+              />
+            ))
+          )}
         </div>
 
         {onCreateNote && (
