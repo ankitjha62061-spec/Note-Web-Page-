@@ -42,6 +42,7 @@
   background-color: #221b1b;
   color: white;
   border: none;
+  /* margin-right: 10px; */
 }
 
 .delete-btn:hover {
