@@ -52,37 +52,6 @@
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.palettes {
-  display: flex;
-  align-items: center;
-  position: absolute;
-  right: 0px;
-  padding: 0.5rem 1rem;
-  gap: 1rem;
-  background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 20px;
-  transition: all 0.3s;
-  opacity: 0;
-  z-index: -1;
-}
-
-.palettes.active {
-  right: 50px;
-  opacity: 1;
-  z-index: 1;
-}
-
-.palette-item {
-  height: 25px;
-  width: 25px;
-  border-radius: 50%;
-}
-
-.palette-item.active,
-.palette-item:hover {
-  border: 2px solid white;
-}
-
 
 .nav-icon.favorite-count {
   margin-left: 1rem;
@@ -90,6 +59,7 @@
   align-items: center;
   color: gold;
   font-weight: bold;
+ 
 }
 
 .nav-icon.favorite-count i {
@@ -97,11 +67,12 @@
 }
 
 .view-buttons button {
-  margin-left: 0.5rem;
+  margin-left: 2.5rem;
   padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
+  padding: 10px;
 }
 
 .view-buttons button.active {
