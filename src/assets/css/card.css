@@ -86,3 +86,12 @@
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
 }
 
+
+.action-item .favorite {
+  color: gold;
+  cursor: pointer;
+}
+
+.action-item .favorite:hover {
+  color: orange;
+}

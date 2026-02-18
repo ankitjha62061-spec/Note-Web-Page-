@@ -17,7 +17,7 @@ export const UpsertNote = ({ setOpen, note, createNote, updateNote }) => {
     if (!title.trim() || !desc.trim()) return;
 
     if (note) {
-      //  Are You want to Update note
+   
       updateNote({
         ...note,
         title,

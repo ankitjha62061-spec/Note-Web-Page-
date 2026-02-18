@@ -15,10 +15,11 @@ export default function App() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
+  const [view, setView] = useState("all"); // "all" or "favorites"
 
   const handleCreateNote = (note) => {
     if (note) {
-      setNotes([...notes, note]);
+      setNotes([...notes, { ...note, favorite: false }]);
     }
   };
 
@@ -30,7 +31,7 @@ export default function App() {
   const handleUpdateNote = (note) => {
     if (note) {
       const updatedNotes = notes.map((n) =>
-        n.id === note.id ? note : n
+        n.id === note.id ? { ...note, favorite: n.favorite } : n
       );
       setNotes(updatedNotes);
       setCurrentNote(null);
@@ -43,8 +44,7 @@ export default function App() {
   };
 
   const confirmDelete = () => {
-    const filteredNotes = notes.filter((n) => n.id !== noteToDelete);
-    setNotes(filteredNotes);
+    setNotes(notes.filter((n) => n.id !== noteToDelete));
     setDeleteVisible(false);
     setNoteToDelete(null);
   };
@@ -59,10 +59,17 @@ export default function App() {
     setOnViewNote(true);
   };
 
+  const toggleFavorite = (noteId) => {
+    const updatedNotes = notes.map((n) =>
+      n.id === noteId ? { ...n, favorite: !n.favorite } : n
+    );
+    setNotes(updatedNotes);
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
-    }, 500); 
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [search]);
@@ -75,9 +82,18 @@ export default function App() {
       )
     : notes;
 
+  const displayedNotes = filteredNotes.filter((n) =>
+    view === "favorites" ? n.favorite : true
+  );
+
   return (
     <div className="app">
-      <Navbar setOpen={setOnCreateNote} />
+      <Navbar
+        setOpen={setOnCreateNote}
+        favoriteCount={notes.filter((n) => n.favorite).length}
+        setView={setView}
+        currentView={view}
+      />
 
       <div className="wrapper container">
         <div className="search-wrapper">
@@ -94,18 +110,19 @@ export default function App() {
         </div>
 
         <div className="notes-wrapper">
-          {notes.length === 0 ? (
-            <h2 className="Flex">No Notes Yet. Create One!</h2>
-          ) : filteredNotes.length === 0 ? (
-            <h2 className="code-wipe">No Notes Found</h2>
+          {displayedNotes.length === 0 ? (
+            <h2 className="Flex">
+              {view === "favorites" ? "No Favorite Notes" : "No Notes Found"}
+            </h2>
           ) : (
-            filteredNotes.map((note) => (
+            displayedNotes.map((note) => (
               <NoteCard
                 key={note.id}
                 note={note}
                 onDelete={handleDeleteNote}
                 onUpdate={handleOnUpdate}
                 onPreview={handleOnPreview}
+                onToggleFavorite={toggleFavorite}
               />
             ))
           )}
@@ -121,10 +138,7 @@ export default function App() {
         )}
 
         {onViewNote && (
-          <NoteDetails
-            note={currentNote}
-            setView={setOnViewNote}
-          />
+          <NoteDetails note={currentNote} setView={setOnViewNote} />
         )}
 
         <DeleteModal
