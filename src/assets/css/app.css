@@ -5,7 +5,7 @@
   width: 100%;
   min-height: 100vh;
   height: 100%;
-   /* background: linear-gradient(
+   background: linear-gradient(
       135deg, 
       rgba(213, 24, 24, 0.2) 0%, 
       rgba(30, 77, 90, 0.3) 50%, 
@@ -15,9 +15,7 @@
       225deg, 
       rgba(16, 224, 179, 0.15) 0%, 
       rgba(225, 235, 243, 0.25) 100%
-    ); */
-    background-image: url(https://images.rawpixel.com/dark_image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDI0LTAxL3Jhd3BpeGVsb2ZmaWNlM19waG90b19vZl9hX3dhdGVyX3NwbGFzaF9wbmdfaXNvbGF0ZWRfb25fYmxhY2tfYl9jNDVkNGRkMC05MTBmLTRkMjAtOTNjZi00ZDMxNDdjNTdkNzFfMS5wbmc.png);
-  background-color: transparent;
+    );
   }
 
 
@@ -130,5 +128,3 @@
     width: 100%;
   }
 }
-
-

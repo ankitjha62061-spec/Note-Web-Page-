@@ -128,6 +128,14 @@ export default function App() {
           )}
         </div>
 
+
+
+
+
+
+
+
+
         {onCreateNote && (
           <UpsertNote
             note={currentNote}
@@ -148,5 +156,9 @@ export default function App() {
         />
       </div>
     </div>
+
+
+
+
   );
 }

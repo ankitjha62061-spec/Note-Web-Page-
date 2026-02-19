@@ -17,7 +17,7 @@ export const Navbar = ({ setOpen, favoriteCount, setView, currentView }) => {
 
           <div className="view-buttons">
             <button
-              className={currentView === "all" ? "active" : ""}
+              className={currentView === "all" && "active"}
               onClick={() => setView("all")}
             >
               All Notes

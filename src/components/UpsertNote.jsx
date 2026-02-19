@@ -63,7 +63,7 @@ export const UpsertNote = ({ setOpen, note, createNote, updateNote }) => {
           <textarea
             required
             className="textarea-form"
-            maxLength={2000}
+            maxLength={20000}
             placeholder="Enter your note"
             value={desc}
             onChange={(e) => setDesc(e.target.value)}
