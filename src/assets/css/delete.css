@@ -11,6 +11,7 @@
   z-index: 1000;
 }
 
+
 .delete-modal {
   background-color: white;
   padding: 2rem;
@@ -40,7 +41,7 @@
   font-weight: 500;
   transition: 0.3s ease;
   background-color: #221b1b;
-  color: white;
+  color: rgb(253, 248, 248);
   border: none;
   /* margin-right: 10px; */
 }
