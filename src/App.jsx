@@ -5,6 +5,7 @@ import { NoteCard } from "./components/NoteCard";
 import { NoteDetails } from "./components/NoteDetails";
 import { UpsertNote } from "./components/UpsertNote";
 import { DeleteModal } from "./components/DeleteModal";
+import { Sidebar } from "./components/Sidebar";
 
 export default function App() {
   const [onCreateNote, setOnCreateNote] = useState(false);
@@ -15,7 +16,7 @@ export default function App() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
-  const [view, setView] = useState("all"); // "all" or "favorites"
+  const [view, setView] = useState("all"); //
 
   const handleCreateNote = (note) => {
     if (note) {
@@ -87,13 +88,22 @@ export default function App() {
   );
 
   return (
+
+
+
     <div className="app">
+<Sidebar/>
+
+      
       <Navbar
         setOpen={setOnCreateNote}
         favoriteCount={notes.filter((n) => n.favorite).length}
         setView={setView}
         currentView={view}
       />
+
+
+
 
       <div className="wrapper container">
         <div className="search-wrapper">

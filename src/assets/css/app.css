@@ -1,6 +1,6 @@
 .app {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   flex-direction: column;
   width: 100%;
   min-height: 100vh;
@@ -85,11 +85,16 @@
 
 .notes-wrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
+  grid-template-columns: repeat(auto-fill,minmax(400px,1fr));
   gap: 2rem;
   
 }
+/* 
+.notes-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
 
+} */
 
 
 
@@ -132,4 +137,33 @@
   .search-wrapper {
     width: 100%;
   }
+}
+
+
+
+
+
+
+.app-layout {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background: #111827;
+  color: white;
+  padding: 20px;
+}
+
+.right-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
 }
