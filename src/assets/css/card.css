@@ -59,6 +59,8 @@
 .action-item {
   cursor: pointer;
   opacity: 0.8;
+  margin-right: 10px;
+  padding-left: 5px;
 }
 
 .action-item:hover {

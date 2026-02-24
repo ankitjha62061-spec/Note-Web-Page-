@@ -18,6 +18,30 @@ export default function App() {
   const [noteToDelete, setNoteToDelete] = useState(null);
   const [view, setView] = useState("all"); //
 
+
+
+
+useEffect(() => {
+  const savedNotes = localStorage.getItem("notes");
+  if (savedNotes) {
+    setNotes(JSON.parse(savedNotes));
+  }
+}, []);
+
+
+useEffect(() => {
+  localStorage.setItem("notes", JSON.stringify(notes));
+}, [notes]);
+
+
+
+
+
+
+
+
+
+
   const handleCreateNote = (note) => {
     if (note) {
       setNotes([...notes, { ...note, favorite: false }]);
