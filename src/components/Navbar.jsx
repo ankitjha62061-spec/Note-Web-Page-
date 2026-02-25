@@ -15,7 +15,8 @@ export const Navbar = ({ setOpen, favoriteCount }) => {
             <i className="fa-solid fa-plus"></i>
           </div>
 
-          <div className="nav-icon favorite-count" onClick={() => navigate("/favorites")} style={{ cursor: "pointer" }}>
+          <div className="nav-icon favorite-count" onClick={() => 
+            navigate("/favorites")} style={{ cursor: "pointer" }}>
             <i className="fa-solid fa-star"></i> {favoriteCount}
           </div>
 

@@ -114,10 +114,13 @@ export default function App() {
         </div>
 
         <Routes>
-          <Route path="/" element={<AllNotes notes={filteredNotes} onDelete={askDelete} onToggleFavorite={toggleFavorite} />} />
-          <Route path="/favorites" element={<FavoriteNotes notes={filteredNotes} onDelete={askDelete} onToggleFavorite={toggleFavorite} />} />
+          <Route path="/" element={<AllNotes notes={filteredNotes} onDelete={askDelete} 
+          onToggleFavorite={toggleFavorite} />} />
+          <Route path="/favorites" element={<FavoriteNotes notes={filteredNotes} 
+          onDelete={askDelete} onToggleFavorite={toggleFavorite} />} />
           <Route path="/note/:id" element={<NoteDetails notes={notes} />} />
-          <Route path="/create" element={<UpsertNote createNote={addNote} updateNote={editNote} notes={notes} />} />
+          <Route path="/create" element={<UpsertNote createNote={addNote}
+           updateNote={editNote} notes={notes} />} />
           <Route path="/edit/:id" element={<UpsertNote createNote={addNote} updateNote={editNote} notes={notes} />} />
         </Routes>
 

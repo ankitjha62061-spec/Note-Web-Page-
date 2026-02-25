@@ -24,7 +24,12 @@
   font-size: 2rem;
   font-weight: bold;
   cursor: pointer;
+   text-decoration: none;
+  color: inherit; 
 }
+
+
+
 
 .nav-options {
   display: flex;
