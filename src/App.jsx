@@ -1,135 +1,105 @@
 import { useState, useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import "./assets/css/app.css";
 import { Navbar } from "./components/Navbar";
 import { NoteCard } from "./components/NoteCard";
 import { NoteDetails } from "./components/NoteDetails";
 import { UpsertNote } from "./components/UpsertNote";
 import { DeleteModal } from "./components/DeleteModal";
-import { Sidebar } from "./components/Sidebar";
+
+const AllNotes = ({ notes, onDelete, onToggleFavorite }) => (
+  <div className="notes-wrapper">
+    {notes.length === 0 ? (
+      <h2 className="Flex">No Notes Found</h2>
+    ) : (
+      notes.map((note) => (
+        <NoteCard key={note.id} note={note} onDelete={onDelete} onToggleFavorite={onToggleFavorite} />
+      ))
+    )}
+  </div>
+);
+
+const FavoriteNotes = ({ notes, onDelete, onToggleFavorite }) => {
+  const favorites = notes.filter((n) => n.favorite);
+  return (
+    <div className="notes-wrapper">
+      {favorites.length === 0 ? (
+        <h2 className="Flex">No Favorite Notes</h2>
+      ) : (
+        favorites.map((note) => (
+          <NoteCard key={note.id} note={note} onDelete={onDelete} onToggleFavorite={onToggleFavorite} />
+        ))
+      )}
+    </div>
+  );
+};
 
 export default function App() {
-  const [onCreateNote, setOnCreateNote] = useState(false);
-  const [onViewNote, setOnViewNote] = useState(false);
   const [notes, setNotes] = useState([]);
-  const [currentNote, setCurrentNote] = useState(null);
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [search, setSearch] = useState("");           
+  const [debouncedSearch, setDebouncedSearch] = useState(""); 
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
-  const [view, setView] = useState("all"); //
-
-
-
-
-useEffect(() => {
-  const savedNotes = localStorage.getItem("notes");
-  if (savedNotes) {
-    setNotes(JSON.parse(savedNotes));
-  }
-}, []);
-
-
-useEffect(() => {
-  localStorage.setItem("notes", JSON.stringify(notes));
-}, [notes]);
-
-
-
-
-
-
-
-
-
-
-  const handleCreateNote = (note) => {
-    if (note) {
-      setNotes([...notes, { ...note, favorite: false }]);
-    }
-  };
-
-  const handleOnUpdate = (note) => {
-    setCurrentNote(note);
-    setOnCreateNote(true);
-  };
-
-  const handleUpdateNote = (note) => {
-    if (note) {
-      const updatedNotes = notes.map((n) =>
-        n.id === note.id ? { ...note, favorite: n.favorite } : n
-      );
-      setNotes(updatedNotes);
-      setCurrentNote(null);
-    }
-  };
-
-  const handleDeleteNote = (noteId) => {
-    setNoteToDelete(noteId);
-    setDeleteVisible(true);
-  };
-
-  const confirmDelete = () => {
-    setNotes(notes.filter((n) => n.id !== noteToDelete));
-    setDeleteVisible(false);
-    setNoteToDelete(null);
-  };
-
-  const cancelDelete = () => {
-    setDeleteVisible(false);
-    setNoteToDelete(null);
-  };
-
-  const handleOnPreview = (note) => {
-    setCurrentNote(note);
-    setOnViewNote(true);
-  };
-
-  const toggleFavorite = (noteId) => {
-    const updatedNotes = notes.map((n) =>
-      n.id === noteId ? { ...n, favorite: !n.favorite } : n
-    );
-    setNotes(updatedNotes);
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(search);
-    }, 500);
+    const saved = localStorage.getItem("notes");
+    if (saved) setNotes(JSON.parse(saved));
+  }, []);
 
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 500);
     return () => clearTimeout(timer);
   }, [search]);
 
   const filteredNotes = debouncedSearch
-    ? notes.filter(
-        (n) =>
-          n.title.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-          n.desc.toLowerCase().includes(debouncedSearch.toLowerCase())
+    ? notes.filter((n) =>
+        n.title.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        n.desc.toLowerCase().includes(debouncedSearch.toLowerCase())
       )
     : notes;
 
-  const displayedNotes = filteredNotes.filter((n) =>
-    view === "favorites" ? n.favorite : true
-  );
+  const addNote = (note) => {
+    setNotes((prev) => [...prev, { ...note, favorite: false }]);
+    navigate("/");
+  };
+
+  const editNote = (note) => {
+    setNotes((prev) =>
+      prev.map((n) => n.id === note.id ? { ...note, favorite: n.favorite } : n)
+    );
+    navigate("/");
+  };
+
+  const askDelete = (id) => {
+    setNoteToDelete(id);
+    setDeleteVisible(true);
+  };
+
+  const confirmDelete = () => {
+    setNotes((prev) => prev.filter((n) => n.id !== noteToDelete));
+    setDeleteVisible(false);
+  };
+
+  const toggleFavorite = (id) => {
+    setNotes((prev) =>
+      prev.map((n) => n.id === id ? { ...n, favorite: !n.favorite } : n)
+    );
+  };
 
   return (
-
-
-
     <div className="app">
-<Sidebar/>
-
-      
       <Navbar
-        setOpen={setOnCreateNote}
+        setOpen={() => navigate("/create")}
         favoriteCount={notes.filter((n) => n.favorite).length}
-        setView={setView}
-        currentView={view}
       />
 
-
-
-
       <div className="wrapper container">
+
         <div className="search-wrapper">
           <input
             value={search}
@@ -143,56 +113,20 @@ useEffect(() => {
           </button>
         </div>
 
-        <div className="notes-wrapper">
-          {displayedNotes.length === 0 ? (
-            <h2 className="Flex">
-              {view === "favorites" ? "No Favorite Notes" : "No Notes Found"}
-            </h2>
-          ) : (
-            displayedNotes.map((note) => (
-              <NoteCard
-                key={note.id}
-                note={note}
-                onDelete={handleDeleteNote}
-                onUpdate={handleOnUpdate}
-                onPreview={handleOnPreview}
-                onToggleFavorite={toggleFavorite}
-              />
-            ))
-          )}
-        </div>
-
-
-
-
-
-
-
-
-
-        {onCreateNote && (
-          <UpsertNote
-            note={currentNote}
-            createNote={handleCreateNote}
-            updateNote={handleUpdateNote}
-            setOpen={setOnCreateNote}
-          />
-        )}
-
-        {onViewNote && (
-          <NoteDetails note={currentNote} setView={setOnViewNote} />
-        )}
+        <Routes>
+          <Route path="/" element={<AllNotes notes={filteredNotes} onDelete={askDelete} onToggleFavorite={toggleFavorite} />} />
+          <Route path="/favorites" element={<FavoriteNotes notes={filteredNotes} onDelete={askDelete} onToggleFavorite={toggleFavorite} />} />
+          <Route path="/note/:id" element={<NoteDetails notes={notes} />} />
+          <Route path="/create" element={<UpsertNote createNote={addNote} updateNote={editNote} notes={notes} />} />
+          <Route path="/edit/:id" element={<UpsertNote createNote={addNote} updateNote={editNote} notes={notes} />} />
+        </Routes>
 
         <DeleteModal
           visible={deleteVisible}
           onConfirm={confirmDelete}
-          onCancel={cancelDelete}
+          onCancel={() => setDeleteVisible(false)}
         />
       </div>
     </div>
-
-
-
-
   );
 }

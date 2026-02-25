@@ -1,10 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import "../assets/css/card.css";
 
-export const NoteCard = ({ onPreview, onUpdate, onDelete, onToggleFavorite, note }) => {
+export const NoteCard = ({ onUpdate, onDelete, onToggleFavorite, note }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="note-card">
       <div className="note-card-wrapper">
-        <h2 className="card-title" onClick={() => onPreview(note)}>
+        
+        <h2 className="card-title" onClick={() => navigate(`/note/${note.id}`)}>
           {note.title}
         </h2>
 
@@ -16,7 +20,8 @@ export const NoteCard = ({ onPreview, onUpdate, onDelete, onToggleFavorite, note
           <span className="card-timeline">{note.createdAt}</span>
 
           <div className="card-actions">
-            <div className="action-item" onClick={() => onUpdate(note)}>
+            
+            <div className="action-item" onClick={() => navigate(`/edit/${note.id}`)}>
               <i className="fa-solid fa-pen-to-square edit"></i>
             </div>
 
@@ -31,6 +36,7 @@ export const NoteCard = ({ onPreview, onUpdate, onDelete, onToggleFavorite, note
                 <i className="fa-regular fa-star favorite"></i>
               )}
             </div>
+
           </div>
         </div>
       </div>

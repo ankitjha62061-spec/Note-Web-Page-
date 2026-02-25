@@ -1,10 +1,16 @@
 import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom"; // ✅ added
 import "../assets/css/upsert.css";
 import { v4 as getID } from "uuid";
 
-export const UpsertNote = ({ setOpen, note, createNote, updateNote }) => {
-  const [title, setTitle] = useState(note ? note.title : "");
-  const [desc, setDesc] = useState(note ? note.desc : "");
+export const UpsertNote = ({ createNote, updateNote, notes }) => {
+  const { id } = useParams();       
+  const navigate = useNavigate();    
+
+  const existingNote = id ? notes.find((n) => n.id === id) : null; 
+
+  const [title, setTitle] = useState(existingNote ? existingNote.title : "");
+  const [desc, setDesc] = useState(existingNote ? existingNote.desc : "");
 
   const clearInputs = () => {
     setTitle("");
@@ -16,15 +22,9 @@ export const UpsertNote = ({ setOpen, note, createNote, updateNote }) => {
 
     if (!title.trim() || !desc.trim()) return;
 
-    if (note) {
-   
-      updateNote({
-        ...note,
-        title,
-        desc,
-      });
+    if (existingNote) {
+      updateNote({ ...existingNote, title, desc });
     } else {
-      // Create note
       createNote({
         id: getID(),
         title,
@@ -34,7 +34,7 @@ export const UpsertNote = ({ setOpen, note, createNote, updateNote }) => {
     }
 
     clearInputs();
-    setOpen(false);
+    navigate("/"); //
   };
 
   return (
@@ -42,9 +42,9 @@ export const UpsertNote = ({ setOpen, note, createNote, updateNote }) => {
       <div className="upsert-wrapper">
         <div className="upsert-header">
           <h2 className="heading">
-            {note ? "Are you want to update the note " : "Add Note"}
+            {existingNote ? "Update Note" : "Add Note"}
           </h2>
-          <div className="close-btn" onClick={() => setOpen(false)}>
+          <div className="close-btn" onClick={() => navigate(-1)}>
             <i className="fa-solid fa-xmark"></i>
           </div>
         </div>
@@ -70,14 +70,9 @@ export const UpsertNote = ({ setOpen, note, createNote, updateNote }) => {
           ></textarea>
 
           <div className="upsert-actions">
-            <button
-              type="button"
-              className="clear-btn"
-              onClick={clearInputs}
-            >
+            <button type="button" className="clear-btn" onClick={clearInputs}>
               Clear
             </button>
-
             <button type="submit" className="save-btn">
               Save
             </button>
