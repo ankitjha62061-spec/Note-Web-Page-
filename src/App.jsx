@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import "./assets/css/app.css";
 import { Navbar } from "./components/Navbar";
@@ -47,14 +47,17 @@ export default function App() {
     if (saved) setNotes(JSON.parse(saved));
   }, []);
 
+  
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
   }, [notes]);
+
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search), 500);
     return () => clearTimeout(timer);
   }, [search]);
+
 
   const filteredNotes = debouncedSearch
     ? notes.filter((n) =>
@@ -114,14 +117,26 @@ export default function App() {
         </div>
 
         <Routes>
-          <Route path="/" element={<AllNotes notes={filteredNotes} onDelete={askDelete} 
+          <Route path="/" element={<AllNotes 
+          notes={filteredNotes} onDelete={askDelete} 
           onToggleFavorite={toggleFavorite} />} />
-          <Route path="/favorites" element={<FavoriteNotes notes={filteredNotes} 
-          onDelete={askDelete} onToggleFavorite={toggleFavorite} />} />
-          <Route path="/note/:id" element={<NoteDetails notes={notes} />} />
+
+
+          <Route path="/favorites" element={<FavoriteNotes
+         notes={filteredNotes} onDelete={askDelete}
+         onToggleFavorite={toggleFavorite} />} />
+
+
+          <Route path="/note/:id" element={<NoteDetails 
+          notes={notes} />} />
+
+
           <Route path="/create" element={<UpsertNote createNote={addNote}
            updateNote={editNote} notes={notes} />} />
-          <Route path="/edit/:id" element={<UpsertNote createNote={addNote} updateNote={editNote} notes={notes} />} />
+
+
+          <Route path="/edit/:id" element={<UpsertNote 
+          createNote={addNote} updateNote={editNote} notes={notes} />} />
         </Routes>
 
         <DeleteModal

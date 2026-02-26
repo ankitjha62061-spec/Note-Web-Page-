@@ -48,12 +48,11 @@ export const UpsertNote = ({ createNote, updateNote, notes }) => {
             <i className="fa-solid fa-xmark"></i>
           </div>
         </div>
-
         <form className="upsert-form" onSubmit={handleSubmit}>
           <input
             required
             type="text"
-            maxLength={50}
+            maxLength={500}
             placeholder="Title"
             className="input-form"
             value={title}
