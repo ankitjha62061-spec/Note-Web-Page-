@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"; // ✅ added
+import { useNavigate, useParams } from "react-router-dom"; 
 import "../assets/css/upsert.css";
 import { v4 as getID } from "uuid";
 
@@ -52,7 +52,7 @@ export const UpsertNote = ({ createNote, updateNote, notes }) => {
           <input
             required
             type="text"
-            maxLength={500}
+            maxLength={50}
             placeholder="Title"
             className="input-form"
             value={title}
@@ -62,7 +62,7 @@ export const UpsertNote = ({ createNote, updateNote, notes }) => {
           <textarea
             required
             className="textarea-form"
-            maxLength={20000}
+            maxLength={2000}
             placeholder="Enter your note"
             value={desc}
             onChange={(e) => setDesc(e.target.value)}

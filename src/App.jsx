@@ -1,45 +1,21 @@
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import "./assets/css/app.css";
 import { Navbar } from "./components/Navbar";
-import { NoteCard } from "./components/NoteCard";
-import { NoteDetails } from "./components/NoteDetails";
-import { UpsertNote } from "./components/UpsertNote";
 import { DeleteModal } from "./components/DeleteModal";
-
-const AllNotes = ({ notes, onDelete, onToggleFavorite }) => (
-  <div className="notes-wrapper">
-    {notes.length === 0 ? (
-      <h2 className="Flex">No Notes Found</h2>
-    ) : (
-      notes.map((note) => (
-        <NoteCard key={note.id} note={note} onDelete={onDelete} onToggleFavorite={onToggleFavorite} />
-      ))
-    )}
-  </div>
-);
-
-const FavoriteNotes = ({ notes, onDelete, onToggleFavorite }) => {
-  const favorites = notes.filter((n) => n.favorite);
-  return (
-    <div className="notes-wrapper">
-      {favorites.length === 0 ? (
-        <h2 className="Flex">No Favorite Notes</h2>
-      ) : (
-        favorites.map((note) => (
-          <NoteCard key={note.id} note={note} onDelete={onDelete} onToggleFavorite={onToggleFavorite} />
-        ))
-      )}
-    </div>
-  );
-};
+import { AllNotes } from "./pages/AllNotes";
+import { FavoriteNotes } from "./pages/FavoriteNotes";
+import { NoteDetails } from "./pages/NoteDetails";
+import { UpsertNote } from "./pages/UpsertNote";
 
 export default function App() {
   const [notes, setNotes] = useState([]);
-  const [search, setSearch] = useState("");           
-  const [debouncedSearch, setDebouncedSearch] = useState(""); 
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
+  const [onViewNote, setOnViewNote] = useState(false);   
+  const [currentNote, setCurrentNote] = useState(null);  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,17 +23,14 @@ export default function App() {
     if (saved) setNotes(JSON.parse(saved));
   }, []);
 
-  
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
   }, [notes]);
-
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search), 500);
     return () => clearTimeout(timer);
   }, [search]);
-
 
   const filteredNotes = debouncedSearch
     ? notes.filter((n) =>
@@ -94,6 +67,11 @@ export default function App() {
     );
   };
 
+  const handlePreview = (note) => {
+    setCurrentNote(note);
+    setOnViewNote(true);
+  };
+
   return (
     <div className="app">
       <Navbar
@@ -102,7 +80,6 @@ export default function App() {
       />
 
       <div className="wrapper container">
-
         <div className="search-wrapper">
           <input
             value={search}
@@ -117,27 +94,15 @@ export default function App() {
         </div>
 
         <Routes>
-          <Route path="/" element={<AllNotes 
-          notes={filteredNotes} onDelete={askDelete} 
-          onToggleFavorite={toggleFavorite} />} />
-
-
-          <Route path="/favorites" element={<FavoriteNotes
-         notes={filteredNotes} onDelete={askDelete}
-         onToggleFavorite={toggleFavorite} />} />
-
-
-          <Route path="/note/:id" element={<NoteDetails 
-          notes={notes} />} />
-
-
-          <Route path="/create" element={<UpsertNote createNote={addNote}
-           updateNote={editNote} notes={notes} />} />
-
-
-          <Route path="/edit/:id" element={<UpsertNote 
-          createNote={addNote} updateNote={editNote} notes={notes} />} />
+          <Route path="/" element={<AllNotes notes={filteredNotes} onDelete={askDelete} onToggleFavorite={toggleFavorite} onPreview={handlePreview} />} />
+          <Route path="/favorites" element={<FavoriteNotes notes={filteredNotes} onDelete={askDelete} onToggleFavorite={toggleFavorite} onPreview={handlePreview} />} />
+          <Route path="/create" element={<UpsertNote createNote={addNote} updateNote={editNote} notes={notes} />} />
+          <Route path="/edit/:id" element={<UpsertNote createNote={addNote} updateNote={editNote} notes={notes} />} />
         </Routes>
+
+        {onViewNote && (
+          <NoteDetails note={currentNote} setView={setOnViewNote} />
+        )}
 
         <DeleteModal
           visible={deleteVisible}
