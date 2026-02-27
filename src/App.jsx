@@ -7,25 +7,17 @@ import { AllNotes } from "./pages/AllNotes";
 import { FavoriteNotes } from "./pages/FavoriteNotes";
 import { NoteDetails } from "./pages/NoteDetails";
 import { UpsertNote } from "./pages/UpsertNote";
+import { useNotes } from "./context/NoteContext"; 
 
 export default function App() {
-  const [notes, setNotes] = useState([]);
+  const { notes, addNote, editNote, deleteNote, toggleFavorite } = useNotes();
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
-  const [onViewNote, setOnViewNote] = useState(false);   
-  const [currentNote, setCurrentNote] = useState(null);  
+  const [onViewNote, setOnViewNote] = useState(false);
+  const [currentNote, setCurrentNote] = useState(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const saved = localStorage.getItem("notes");
-    if (saved) setNotes(JSON.parse(saved));
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  }, [notes]);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search), 500);
@@ -39,37 +31,29 @@ export default function App() {
       )
     : notes;
 
-  const addNote = (note) => {
-    setNotes((prev) => [...prev, { ...note, favorite: false }]);
-    navigate("/");
-  };
-
-  const editNote = (note) => {
-    setNotes((prev) =>
-      prev.map((n) => n.id === note.id ? { ...note, favorite: n.favorite } : n)
-    );
-    navigate("/");
-  };
-
   const askDelete = (id) => {
     setNoteToDelete(id);
     setDeleteVisible(true);
   };
 
   const confirmDelete = () => {
-    setNotes((prev) => prev.filter((n) => n.id !== noteToDelete));
+    deleteNote(noteToDelete); 
     setDeleteVisible(false);
-  };
-
-  const toggleFavorite = (id) => {
-    setNotes((prev) =>
-      prev.map((n) => n.id === id ? { ...n, favorite: !n.favorite } : n)
-    );
   };
 
   const handlePreview = (note) => {
     setCurrentNote(note);
     setOnViewNote(true);
+  };
+
+  const handleAddNote = (note) => {
+    addNote(note); // 
+    navigate("/");
+  };
+
+  const handleEditNote = (note) => {
+    editNote(note); // 
+    navigate("/");
   };
 
   return (
@@ -96,8 +80,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<AllNotes notes={filteredNotes} onDelete={askDelete} onToggleFavorite={toggleFavorite} onPreview={handlePreview} />} />
           <Route path="/favorites" element={<FavoriteNotes notes={filteredNotes} onDelete={askDelete} onToggleFavorite={toggleFavorite} onPreview={handlePreview} />} />
-          <Route path="/create" element={<UpsertNote createNote={addNote} updateNote={editNote} notes={notes} />} />
-          <Route path="/edit/:id" element={<UpsertNote createNote={addNote} updateNote={editNote} notes={notes} />} />
+          <Route path="/create" element={<UpsertNote createNote={handleAddNote} updateNote={handleEditNote} notes={notes} />} />
+          <Route path="/edit/:id" element={<UpsertNote createNote={handleAddNote} updateNote={handleEditNote} notes={notes} />} />
         </Routes>
 
         {onViewNote && (

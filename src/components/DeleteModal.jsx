@@ -20,3 +20,4 @@ export const DeleteModal = ({ visible, onConfirm, onCancel }) => {
     </div>
   );
 };
+
