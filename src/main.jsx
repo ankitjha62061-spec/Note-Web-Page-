@@ -15,9 +15,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <ErrorBoundary>
 
      <NoteProvider>
-
-
-       <App />
+      <App />
        </NoteProvider>
       </ErrorBoundary>
     </BrowserRouter>
