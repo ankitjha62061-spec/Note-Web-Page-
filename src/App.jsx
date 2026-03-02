@@ -87,6 +87,8 @@ export default function App() {
         {onViewNote && (
           <NoteDetails note={currentNote} setView={setOnViewNote} />
         )}
+        
+
 
         <DeleteModal
           visible={deleteVisible}

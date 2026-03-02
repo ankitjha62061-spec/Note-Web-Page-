@@ -13,6 +13,8 @@ export const NoteProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
   }, [notes]);
+  
+
 
   const addNote = (note) => setNotes((prev) => [...prev, { ...note, favorite: false }]);
   const editNote = (note) => setNotes((prev) => prev.map((n) => n.id === note.id ? { ...note, favorite: n.favorite } : n));
